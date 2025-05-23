@@ -1,0 +1,232 @@
+/* Estilos para o modal personalizado */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: slideIn 0.3s ease-out;
+}
+
+.modal-header {
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: var(--transition-ease);
+}
+
+.modal-close-btn:hover {
+  transform: scale(1.1);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  color: #374151;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.modal-footer {
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  border-top: 1px solid rgba(229, 231, 235, 0.5);
+}
+
+.modal-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-ease);
+}
+
+.cancel-btn {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+}
+
+.cancel-btn:hover {
+  background-color: #e5e7eb;
+}
+
+.confirm-btn {
+  background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
+  color: white;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 102, 255, 0.2);
+}
+
+.confirm-btn:hover {
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 102, 255, 0.3);
+}
+
+/* Estilos para a área de desenho */
+.drawing-container {
+  display: none;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.drawing-toolbar {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #f9fafb;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+}
+
+.drawing-canvas-container {
+  width: 100%;
+  height: calc(100% - 50px);
+  position: relative;
+  overflow: hidden;
+}
+
+#drawingCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: crosshair;
+  background-color: white;
+  touch-action: none; /* Previne comportamentos padrão de toque */
+}
+
+.drawing-tool {
+  padding: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--transition-ease);
+}
+
+.drawing-tool:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+#drawingColorPicker {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+#drawingLineWidth {
+  width: 80px;
+}
+
+#clearDrawingBtn {
+  background: none;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: var(--transition-ease);
+}
+
+#clearDrawingBtn:hover {
+  background-color: #f3f4f6;
+}
+
+/* Botão para alternar entre modo texto e desenho */
+#toggleDrawingModeBtn {
+  background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: var(--transition-ease);
+  margin-left: auto;
+}
+
+#toggleDrawingModeBtn:hover {
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+  transform: translateY(-2px);
+}
+
+#toggleDrawingModeBtn.drawing-mode {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsividade para a área de desenho */
+@media (max-width: 768px) {
+  .drawing-toolbar {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  
+  #toggleDrawingModeBtn {
+    width: 100%;
+    margin-top: 5px;
+    order: 10;
+  }
+}

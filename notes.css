@@ -1,0 +1,371 @@
+/* Estilos para as abas de Blocos de Notas e Leituras */
+
+/* Container principal */
+.notes-container, .readings-container {
+  display: flex;
+  height: 500px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-top: 1rem;
+}
+
+/* Sidebar */
+.notes-sidebar, .readings-sidebar {
+  width: 250px;
+  background-color: #f9fafb;
+  border-right: 1px solid rgba(229, 231, 235, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header da sidebar */
+.notes-header, .readings-header {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notes-header h3, .readings-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-700);
+}
+
+/* Botão de criar nova nota/leitura */
+.create-note-btn, .create-reading-btn {
+  background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: var(--transition-ease);
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 102, 255, 0.2);
+}
+
+.create-note-btn span, .create-reading-btn span {
+  font-size: 1.2rem;
+  margin-right: 0.25rem;
+  line-height: 1;
+}
+
+.create-note-btn:hover, .create-reading-btn:hover {
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 102, 255, 0.3);
+}
+
+/* Lista de notas/leituras */
+.notes-list, .readings-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+/* Item de nota/leitura */
+.note-item, .reading-item {
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition-ease);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  border-left: 3px solid transparent;
+}
+
+.note-item:hover, .reading-item:hover {
+  background-color: #f3f4f6;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.note-item.active, .reading-item.active {
+  background-color: var(--primary-50);
+  border-left-color: var(--primary-500);
+}
+
+/* Cores das notas */
+.note-item.red {
+  border-left-color: #ef4444;
+}
+
+.note-item.green {
+  border-left-color: #10b981;
+}
+
+.note-item.blue {
+  border-left-color: #3b82f6;
+}
+
+.note-item.yellow {
+  border-left-color: #f59e0b;
+}
+
+.note-item.purple {
+  border-left-color: #8b5cf6;
+}
+
+/* Título do item */
+.note-item-title, .reading-item-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+/* Ações do item */
+.note-item-actions, .reading-item-actions {
+  display: flex;
+  align-items: center;
+}
+
+.delete-note-btn, .delete-reading-btn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  line-height: 1;
+  border-radius: 50%;
+  transition: var(--transition-ease);
+}
+
+.delete-note-btn:hover, .delete-reading-btn:hover {
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Área de conteúdo */
+.notes-content, .readings-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+/* Estado vazio */
+.empty-note-state, .empty-reading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+  color: #6b7280;
+}
+
+.empty-note-icon, .empty-reading-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-note-state h3, .empty-reading-state h3 {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.empty-note-state p, .empty-reading-state p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Editor de notas/leituras */
+.note-editor, .reading-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Barra de ferramentas */
+.note-toolbar, .reading-toolbar {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Input de título */
+.note-title-input, .reading-title-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111827;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: var(--transition-ease);
+}
+
+.note-title-input:focus, .reading-title-input:focus {
+  background-color: #f9fafb;
+}
+
+/* Ações da nota */
+.note-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Seletor de cores */
+.note-color-picker {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.color-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #f3f4f6;
+  cursor: pointer;
+  transition: var(--transition-ease);
+  background-color: white;
+}
+
+.color-btn:hover {
+  transform: scale(1.1);
+}
+
+.color-btn.selected {
+  border-color: #111827;
+  transform: scale(1.1);
+}
+
+.color-btn.red {
+  background-color: #fecaca;
+  border-color: #ef4444;
+}
+
+.color-btn.green {
+  background-color: #d1fae5;
+  border-color: #10b981;
+}
+
+.color-btn.blue {
+  background-color: #dbeafe;
+  border-color: #3b82f6;
+}
+
+.color-btn.yellow {
+  background-color: #fef3c7;
+  border-color: #f59e0b;
+}
+
+.color-btn.purple {
+  background-color: #ede9fe;
+  border-color: #8b5cf6;
+}
+
+/* Botão de salvar */
+.save-note-btn, .save-reading-btn {
+  background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition-ease);
+  box-shadow: 0 2px 4px rgba(0, 102, 255, 0.2);
+}
+
+.save-note-btn:hover, .save-reading-btn:hover {
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 102, 255, 0.3);
+}
+
+.save-note-btn.saved, .save-reading-btn.saved {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+/* Área de texto */
+.note-content-textarea, .reading-content-textarea {
+  flex: 1;
+  border: none;
+  outline: none;
+  resize: none;
+  padding: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #374151;
+}
+
+/* Mensagem de lista vazia */
+.empty-notes-message, .empty-readings-message {
+  padding: 1rem;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .notes-container, .readings-container {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .notes-sidebar, .readings-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+    max-height: 200px;
+  }
+  
+  .notes-content, .readings-content {
+    height: 400px;
+  }
+  
+  /* Garantir que a barra de ferramentas seja visível em telas pequenas */
+  .note-toolbar, .reading-toolbar {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .note-title-input, .reading-title-input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .note-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  /* Garantir que o botão de salvar seja sempre visível */
+  .save-note-btn, .save-reading-btn {
+    position: sticky;
+    bottom: 10px;
+    right: 10px;
+    z-index: 10;
+    margin-top: 10px;
+    width: 100%;
+  }
+  
+  /* Ajustar área de conteúdo para garantir espaço para o botão */
+  .note-content-textarea, .reading-content-textarea {
+    padding-bottom: 60px;
+  }
+}

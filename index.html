@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cristão Master - Microdesafios para uma fé mais forte.</title>
+  <link rel="icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="quiz.css">
+  <link rel="stylesheet" href="notes.css">
+  <link rel="stylesheet" href="drawing.css">
+  <link rel="stylesheet" href="chatgpt.css">
+  <style>
+    :root {
+      --primary-50: #e6f0ff;
+      --primary-100: #cce0ff;
+      --primary-200: #99c2ff;
+      --primary-300: #66a3ff;
+      --primary-400: #3385ff;
+      --primary-500: #0066ff;
+      --primary-600: #0052cc;
+      --primary-700: #003d99;
+      --primary-800: #002966;
+      --primary-900: #001433;
+      --success: #10b981;
+      --error: #ef4444;
+      --info: #3b82f6;
+      --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --transition-ease: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, var(--primary-50), #ffffff);
+      min-height: 100vh;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: opacity 0.5s ease-out;
+    }
+    
+    .splash-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .logo-container {
+      animation: pulse 2s infinite;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      padding: 20px;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    }
+    
+    .logo {
+      height: 120px;
+      width: 120px;
+      object-fit: contain;
+      border-radius: 50%;
+      animation: bounce 2s infinite;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+    }
+    
+    .splash-title {
+      color: white;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-top: 1.5rem;
+      animation: fadeIn 1s ease-out;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      letter-spacing: 1px;
+    }
+    
+    .splash-subtitle {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+      animation: fadeIn 1s ease-out;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+    
+    .loading-indicator {
+      margin-top: 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .loading-bar {
+      width: 16px;
+      height: 3px;
+      background-color: rgba(255, 255, 255, 0.7);
+      border-radius: 999px;
+      margin-bottom: 0.5rem;
+      animation: pulse 1s infinite;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+    
+    .loading-bar:nth-child(2) {
+      width: 12px;
+      opacity: 0.6;
+      animation-delay: 0.15s;
+    }
+    
+    .loading-bar:nth-child(3) {
+      width: 8px;
+      opacity: 0.4;
+      animation-delay: 0.3s;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+      width: 100%;
+    }
+    
+    header {
+      background-color: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 1rem 0;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo-header {
+      height: 40px;
+      width: 40px;
+      object-fit: contain;
+      border-radius: 50%;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+    }
+    
+    .brand-name {
+      font-weight: 700;
+      color: var(--primary-700);
+      margin-left: 0.75rem;
+      font-size: 1.25rem;
+      letter-spacing: 0.5px;
+    }
+    
+    .points {
+      font-weight: 600;
+      color: var(--primary-700);
+      background: linear-gradient(135deg, var(--primary-50), white);
+      padding: 8px 16px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: var(--transition-ease);
+    }
+    
+    .points:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+      padding-bottom: 1px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .tab {
+      padding: 0.75rem 1.25rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      cursor: pointer;
+      white-space: nowrap;
+      color: #6b7280;
+      border-bottom: 2px solid transparent;
+      transition: var(--transition-ease);
+      border-radius: 12px 12px 0 0;
+      margin-right: 4px;
+      background: transparent;
+      border: none;
+      outline: none;
+    }
+    
+    .tab:hover {
+      color: #374151;
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+    
+    .tab.active {
+      color: var(--primary-600);
+      border-bottom: 2px solid var(--primary-500);
+      background: linear-gradient(to bottom, var(--primary-50), transparent);
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: var(--transition-ease);
+      border: 1px solid rgba(229, 231, 235, 0.3);
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary-700);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.5px;
+    }
+    
+    .card-subtitle {
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+      font-weight: 300;
+    }
+    
+    .mission-card {
+      background: linear-gradient(135deg, var(--primary-50), white);
+      border: 1px solid rgba(var(--primary-200), 0.3);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: var(--transition-ease);
+    }
+    
+    .mission-card:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .mission-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary-700);
+      margin-bottom: 0.5rem;
+    }
+    
+    .mission-description {
+      font-size: 0.875rem;
+      color: #6b7280;
+      font-weight: 300;
+      line-height: 1.5;
+    }
+    
+    .timer-container {
+      margin-top: 1.5rem;
+    }
+    
+    .timer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    
+    .timer-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #6b7280;
+    }
+    
+    .timer-value {
+      font-weight: 600;
+      color: var(--primary-700);
+      font-size: 1.125rem;
+      letter-spacing: 1px;
+    }
+    
+    .timer-value.danger {
+      color: var(--error);
+      animation: pulse 1s infinite;
+    }
+    
+    .progress-bar {
+      height: 0.5rem;
+      background-color: rgba(229, 231, 235, 0.5);
+      border-radius: 999px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--primary-400), var(--primary-600));
+      border-radius: 999px;
+      transition: width 1s linear;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .progress-fill.danger {
+      background: linear-gradient(to right, #f87171, var(--error));
+    }
+    
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 0.875rem 1.5rem;
+      background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition-ease);
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 102, 255, 0.2);
+      letter-spacing: 0.5px;
+      font-size: 1rem;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 102, 255, 0.3);
+    }
+    
+    .btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 8px rgba(0, 102, 255, 0.2);
+    }
+    
+    .btn:disabled {
+      background: #f3f4f6;
+      color: #9ca3af;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+      border: 1px dashed #d1d5db;
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, #f87171, var(--error));
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+      margin-top: 0.75rem;
+    }
+    
+    .btn-danger:hover {
+      box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+    }
+    
+    .btn-danger:active {
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+    }
+    
+    .message {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      animation: fadeIn 0.3s ease-out;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      border-left: 4px solid transparent;
+    }
+    
+    .message.success {
+      background-color: #ecfdf5;
+      color: var(--success);
+      border-left-color: var(--success);
+    }
+    
+    .message.error {
+      background-color: #fef2f2;
+      color: var(--error);
+      border-left-color: var(--error);
+    }
+    
+    .message.info {
+      background-color: #eff6ff;
+      color: var(--info);
+      border-left-color: var(--info);
+    }
+    
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+      transition: var(--transition-ease);
+    }
+    
+    .history-item:hover {
+      background-color: rgba(var(--primary-50), 0.5);
+    }
+    
+    .history-item:last-child {
+      border-bottom: none;
+    }
+    
+    .history-mission {
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    
+    .history-date {
+      font-size: 0.75rem;
+      color: #6b7280;
+      font-weight: 300;
+    }
+    
+    .history-status {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .history-status.completed {
+      background: linear-gradient(135deg, #d1fae5, #ecfdf5);
+      color: var(--success);
+    }
+    
+    .history-status.failed {
+      background: linear-gradient(135deg, #fee2e2, #fef2f2);
+      color: var(--error);
+    }
+    
+    .reward-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+      transition: var(--transition-ease);
+      border-radius: 12px;
+      margin-bottom: 0.75rem;
+    }
+    
+    .reward-item:hover {
+      background-color: rgba(0, 102, 255, 0.05);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    }
+    
+    .reward-item:last-child {
+      border-bottom: none;
+    }
+    
+    .reward-info {
+      flex: 1;
+      position: relative;
+      padding-left: 1rem;
+      border-left: 3px solid var(--primary-400);
+    }
+    
+    .reward-name {
+      font-weight: 700;
+      margin-bottom: 6px;
+      font-size: 1.1rem;
+      color: var(--primary-700);
+      letter-spacing: 0.3px;
+    }
+    
+    .reward-points {
+      font-size: 0.95rem;
+      color: var(--primary-600);
+      font-weight: 500;
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary-50), var(--primary-100));
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+    }
+    
+    .reward-btn {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      border-radius: 8px;
+      margin-left: 1rem;
+      min-width: 80px;
+      background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
+      color: white;
+      border: none;
+      box-shadow: 0 2px 4px rgba(0, 102, 255, 0.2);
+    }
+    
+    .reward-btn:hover {
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 102, 255, 0.3);
+    }
+    
+    .reward-btn:disabled {
+      background: #f3f4f6;
+      color: #9ca3af;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+      border: 1px dashed #d1d5db;
+    }
+    
+    .notification-toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem;
+      border-radius: 12px;
+      transition: var(--transition-ease);
+    }
+    
+    .notification-toggle:hover {
+      background-color: rgba(var(--primary-50), 0.5);
+    }
+    
+    .notification-info h3 {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .notification-info p {
+      font-size: 0.875rem;
+      color: #6b7280;
+      font-weight: 300;
+    }
+    
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 52px;
+      height: 28px;
+    }
+    
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #e5e7eb;
+      transition: .4s;
+      border-radius: 34px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    input:checked + .toggle-slider {
+      background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
+    }
+    
+    input:checked + .toggle-slider:before {
+      transform: translateX(24px);
+    }
+    
+    .time-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    
+    .time-tag {
+      background: linear-gradient(135deg, var(--primary-100), var(--primary-200));
+      color: var(--primary-700);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      transition: var(--transition-ease);
+    }
+    
+    .time-tag:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .time-tag button {
+      background: none;
+      border: none;
+      margin-left: 0.5rem;
+      color: var(--primary-500);
+      cursor: pointer;
+      font-size: 1.25rem;
+      line-height: 1;
+      transition: var(--transition-ease);
+    }
+    
+    .time-tag button:hover {
+      color: var(--primary-700);
+      transform: scale(1.1);
+    }
+    
+    .time-input {
+      display: flex;
+      margin-bottom: 1rem;
+    }
+    
+    .time-input input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid rgba(209, 213, 219, 0.5);
+      border-right: none;
+      border-radius: 12px 0 0 12px;
+      font-family: 'Poppins', sans-serif;
+      outline: none;
+      transition: var(--transition-ease);
+    }
+    
+    .time-input input:focus {
+      border-color: var(--primary-400);
+      box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.1);
+    }
+    
+    .time-input button {
+      background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
+      color: white;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: 0 12px 12px 0;
+      cursor: pointer;
+      transition: var(--transition-ease);
+    }
+    
+    .time-input button:hover {
+      background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+    }
+    
+    .instruction-step {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background-color: rgba(var(--primary-50), 0.3);
+      border-radius: 12px;
+      border-left: 3px solid var(--primary-400);
+    }
+    
+    .instruction-step h3 {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--primary-700);
+    }
+    
+    .instruction-step p {
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+      color: #4b5563;
+    }
+    
+    .instruction-step ul {
+      padding-left: 1.5rem;
+      font-size: 0.875rem;
+      color: #4b5563;
+    }
+    
+    .instruction-step li {
+      margin-bottom: 0.25rem;
+    }
+    
+    footer {
+      margin-top: auto;
+      background-color: white;
+      padding: 1.5rem 0;
+      text-align: center;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    footer p {
+      color: #6b7280;
+      font-size: 0.875rem;
+      font-weight: 300;
+    }
+    
+    footer p:first-child {
+      font-weight: 500;
+      color: var(--primary-700);
+      margin-bottom: 0.5rem;
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .splash-title {
+        font-size: 2rem;
+      }
+      
+      .splash-subtitle {
+        font-size: 1rem;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .points {
+        width: 100%;
+        text-align: center;
+      }
+      
+      .reward-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .reward-btn {
+        margin-left: 0;
+        margin-top: 1rem;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Splash Screen -->
+  <div id="splashScreen" class="splash-screen">
+    <div class="logo-container">
+      <img src="rewards1.png" alt="Recompensas Logo" class="logo">
+    </div>
+    <h1 class="splash-title">Cristão Master</h1>
+    <p class="splash-subtitle">Microdesafios para uma fé mais forte.</p>
+    <div class="loading-indicator">
+      <div class="loading-bar"></div>
+      <div class="loading-bar"></div>
+      <div class="loading-bar"></div>
+    </div>
+  </div>
+
+  <!-- Main App  <div id="app" style="display: none;">
+    <!-- Elementos de áudio para efeitos sonoros -->
+    <audio id="sound-positive" preload="auto">
+        <source src="sounds/positive.mp3" type="audio/mp3">
+    </audio>
+    <audio id="sound-negative" preload="auto">
+        <source src="sounds/negative.mp3" type="audio/mp3">
+    </audio>
+        <audio id="sound-parabens" preload="auto">
+        <source src="sounds/parabens.mp3" type="audio/mp3">
+    </audio>
+            <audio id="sound-desistiu" preload="auto">
+        <source src="sounds/desistiu.mp3" type="audio/mp3">
+    </audio>
+    
+    <!-- Header -->     <div class="container">
+        <div class="header-content">
+          <div class="brand">
+            <img src="rewards.png" alt="HR Logo" class="logo-header">
+            <h1 class="brand-name">Cristão Master</h1>
+          </div>
+          <div id="pointsDisplay" class="points">0 pontos</div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <div class="tabs">
+          <button class="tab active" data-tab="homeTab">Início</button>
+          <button class="tab" data-tab="historyTab">Histórico</button>
+          <button class="tab" data-tab="rewardsTab">Recompensas</button>
+          <button class="tab" data-tab="quizTab">Quiz</button>
+          <button class="tab" data-tab="notesTab">Blocos de Notas</button>
+          <button class="tab" data-tab="settingsTab">Configurações</button>
+        </div>
+        
+        <div id="tabContent">
+          <!-- Home Tab -->
+          <div id="homeTab" class="tab-pane">
+            <div class="card">
+              <h2 class="card-title">Missões Diárias</h2>
+              <p class="card-subtitle">Complete missões para ganhar pontos e resgatar recompensas.</p>
+              
+              <div class="stats">
+                <div class="stat">
+                  <span class="stat-label">Missões Concluídas Hoje</span>
+                  <span id="missionsCompleted" class="stat-value">0</span>
+                </div>
+              </div>
+              
+              <div id="missionStart">
+                <button id="startMissionBtn" class="btn">Iniciar Nova Missão</button>
+              </div>
+              
+              <div id="activeMission" style="display: none;">
+                <div class="mission-card">
+                  <h3 id="missionTitle" class="mission-title">Nome da Missão</h3>
+                  <p id="missionDescription" class="mission-description">Descrição da missão</p>
+                  <div id="missionDifficulty" class="mission-difficulty"></div>
+                  
+                  <div class="timer-container">
+                    <div class="timer-header">
+                      <span class="timer-label">Tempo Restante</span>
+                      <span id="timerDisplay" class="timer-value">00:00</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div id="timerProgress" class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <button id="completeMissionBtn" class="btn" style="margin-top: 1rem;">Completar Missão</button>
+                <button id="abandonMissionBtn" class="btn btn-danger">Abandonar Missão</button>
+              </div>
+              
+              <div id="missionMessage" class="message" style="display: none;"></div>
+            </div>
+          </div>
+          
+          <!-- History Tab -->
+          <div id="historyTab" class="tab-pane" style="display: none;">
+            <div class="card">
+              <h2 class="card-title">Histórico de Missões</h2>
+              <p class="card-subtitle">Acompanhe seu progresso e missões completadas.</p>
+              
+              <div id="historyList" class="history-list">
+                <!-- Histórico será preenchido dinamicamente -->
+              </div>
+            </div>
+          </div>
+          
+          <!-- Rewards Tab -->
+          <div id="rewardsTab" class="tab-pane" style="display: none;">
+            <div class="card">
+              <h2 class="card-title">Recompensas</h2>
+              <p class="card-subtitle">Troque seus pontos por recompensas exclusivas.</p>
+              
+              <div id="rewardsList" class="rewards-list">
+                <div class="reward-item">
+                  <div class="reward-info">
+                    <div class="reward-name">Quadro decorativo com versículo bíblico</div>
+                    <div class="reward-points">400 pontos</div>
+                  </div>
+                  <button class="reward-btn" data-reward-id="1" data-reward-points="400" data-reward-name="Quadro decorativo com versículo bíblico">Resgatar</button>
+                </div>
+                
+                <div class="reward-item">
+                  <div class="reward-info">
+                    <div class="reward-name">Livro Cristão</div>
+                    <div class="reward-points">750 pontos</div>
+                  </div>
+                  <button class="reward-btn" data-reward-id="2" data-reward-points="750" data-reward-name="Livro Cristão">Resgatar</button>
+                </div>
+                
+                <div class="reward-item">
+                  <div class="reward-info">
+                    <div class="reward-name">Caixinha de promessas</div>
+                    <div class="reward-points">900 pontos</div>
+                  </div>
+                  <button class="reward-btn" data-reward-id="3" data-reward-points="900" data-reward-name="Caixinha de Promessas">Resgatar</button>
+                </div>
+                
+                <div class="reward-item">
+                  <div class="reward-info">
+                    <div class="reward-name">Caneca personalizada</div>
+                    <div class="reward-points">950 pontos</div>
+                  </div>
+                  <button class="reward-btn" data-reward-id="4" data-reward-points="950" data-reward-name="Caneca Personalizada">Resgatar</button>
+                </div>
+                
+                <div class="reward-item">
+                  <div class="reward-info">
+                    <div class="reward-name">Blusa Cristã</div>
+                    <div class="reward-points">1000 pontos</div>
+                  </div>
+                  <button class="reward-btn" data-reward-id="5" data-reward-points="1000" data-reward-name="Blusa Cristã">Resgatar</button>
+                </div>
+                
+                <div class="reward-item">
+                  <div class="reward-info">
+                    <div class="reward-name">Vestido ou Blusa + Saia</div>
+                    <div class="reward-points">1600 pontos</div>
+                  </div>
+                  <button class="reward-btn" data-reward-id="6" data-reward-points="1600" data-reward-name="Vestido ou Blusa + Saia">Resgatar</button>
+                </div>
+                
+                <div class="reward-item">
+                  <div class="reward-info">
+                    <div class="reward-name">Pix de R$ 70,00</div>
+                    <div class="reward-points">2200 pontos</div>
+                  </div>
+                  <button class="reward-btn" data-reward-id="7" data-reward-points="2200" data-reward-name="Pix de R$ 70,00">Resgatar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Quiz Tab -->
+          <div id="quizTab" class="tab-pane" style="display: none;">
+            <div class="card">
+              <h2 class="card-title">Quiz - Fortaleca sua fé</h2>
+              <p class="card-subtitle">Teste seus conhecimentos sobre a Bíblia, Jesus e evangelho.</p>
+              
+              <div class="quiz-container">
+                <!-- Seção inicial do quiz -->
+                <div id="secao-inicial">
+                  <div class="quiz-stats">
+                    <div class="quiz-stat-item">
+                      <div class="quiz-stat-value" id="pontuacao-total">0.0</div>
+                      <div class="quiz-stat-label">Pontuação Total</div>
+                    </div>
+                    <div class="quiz-stat-item">
+                      <div class="quiz-stat-value" id="tentativas-restantes">30</div>
+                      <div class="quiz-stat-label">Tentativas Restantes Hoje</div>
+                    </div>
+                    <div class="quiz-stat-item">
+                      <div class="quiz-stat-value" id="perguntas-respondidas">0</div>
+                      <div class="quiz-stat-label">Perguntas Respondidas</div>
+                    </div>
+                  </div>
+                  
+                  <div class="quiz-controls">
+                    <div class="dificuldade-container" style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                      <div style="display: flex; align-items: center; background: linear-gradient(135deg, var(--primary-50), white); padding: 8px 12px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);">
+                        <label for="selecionar-dificuldade" style="margin-right: 10px; font-weight: 500; color: var(--primary-700);">Dificuldade:</label>
+                        <select id="selecionar-dificuldade" style="padding: 6px 10px; border-radius: 8px; border: 1px solid var(--primary-200); background-color: white; font-family: 'Poppins', sans-serif; color: var(--primary-700); outline: none; cursor: pointer; transition: all 0.2s ease;">
+                          <option value="facil">Fácil</option>
+                          <option value="medio">Médio</option>
+                          <option value="dificil">Difícil</option>
+                        </select>
+                      </div>
+                      <div style="display: flex; align-items: center; margin-left: 5px;">
+                        <span id="dificuldade-badge" class="dificuldade-badge facil" style="margin-right: 8px; padding: 5px 10px; border-radius: 8px; font-weight: 500;">Nível fácil</span>
+                        <span class="pontos-info" style="color: #6b7280; font-size: 0.95rem;">(<span id="pontos-por-questao">1.0</span> pontos por questão)</span>
+                      </div>
+                    </div>
+                    <button id="iniciar-quiz" class="iniciar-quiz-btn">Iniciar Quiz</button>
+                  </div>
+                  
+                  <div id="limite-atingido" class="limite-atingido">
+                    Você atingiu o limite de 30 tentativas hoje. Volte amanhã para mais perguntas!
+                  </div>
+                </div>
+                
+                <!-- Seção de pergunta -->
+                <div id="secao-pergunta" style="display: none;">
+                  <div id="quiz-theme-display" class="quiz-theme-info" style="text-align: center; margin-bottom: 1rem; font-weight: 500; padding: 0.5rem; background: linear-gradient(135deg, var(--primary-50), white); border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); border-left: 3px solid var(--primary-400);"></div> <!-- Elemento para exibir o tema -->
+                  <div class="pergunta-container">
+                    <span id="dificuldade-badge-pergunta" class="dificuldade-badge facil">Nível fácil</span>
+                    <div id="texto-pergunta" class="texto-pergunta">Texto da pergunta aqui?</div>
+                    <div id="opcoes-container" class="opcoes-container">
+                      <!-- Opções serão inseridas dinamicamente -->
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Seção de feedback -->
+                <div id="secao-feedback" class="feedback" style="display: none;">
+                  <div id="mensagem-feedback" class="mensagem-feedback">Resposta Correta!</div>
+                  <div id="pontos-feedback" class="pontos-feedback">+0.5 pontos</div>
+                  <div class="resposta-correta-container">
+                    <strong>Resposta correta:</strong> <span id="resposta-correta"></span>
+                  </div>
+                  <div class="pontuacao-container">
+                    <strong>Sua pontuação total:</strong> <span id="pontuacao-feedback">0.0</span>
+                  </div>
+                  <button id="botao-continuar" class="botao-continuar">Continuar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Blocos de Notas Tab -->
+          <div id="notesTab" class="tab-pane" style="display: none;">
+            <div class="card">
+              <h2 class="card-title">Blocos de Notas</h2>
+              <p class="card-subtitle">Crie e organize suas anotações pessoais.</p>
+              
+              <div class="notes-container">
+                <div class="notes-sidebar">
+                  <div class="notes-header">
+                    <h3>Meus Blocos</h3>
+                    <button id="createNoteBtn" class="create-note-btn">
+                      <span>+</span> Novo
+                    </button>
+                  </div>
+                  <div id="notesList" class="notes-list">
+                    <!-- Lista de blocos de notas será preenchida dinamicamente -->
+                  </div>
+                </div>
+                
+                <div class="notes-content">
+                  <div id="emptyNoteState" class="empty-note-state">
+                    <div class="empty-note-icon">📝</div>
+                    <h3>Nenhum bloco de notas selecionado</h3>
+                    <p>Selecione um bloco existente ou crie um novo para começar.</p>
+                  </div>
+                  
+                  <div id="noteEditor" class="note-editor" style="display: none;">
+                    <div class="note-toolbar">
+                      <input type="text" id="noteTitle" class="note-title-input" placeholder="Título do bloco de notas">
+                      <div class="note-actions">
+                        <div class="note-color-picker">
+                          <button class="color-btn" data-color="default" title="Padrão"></button>
+                          <button class="color-btn red" data-color="red" title="Vermelho"></button>
+                          <button class="color-btn green" data-color="green" title="Verde"></button>
+                          <button class="color-btn blue" data-color="blue" title="Azul"></button>
+                          <button class="color-btn yellow" data-color="yellow" title="Amarelo"></button>
+                          <button class="color-btn purple" data-color="purple" title="Roxo"></button>
+                        </div>
+                        <button id="saveNoteBtn" class="save-note-btn">Salvar</button>
+                      </div>
+                    </div>
+                    
+                    <div id="textContainer" style="height: 100%;">
+                      <textarea id="noteContent" class="note-content-textarea" placeholder="Digite suas anotações aqui..."></textarea>
+                    </div>
+                    
+                    <div id="drawingContainer" class="drawing-container" style="display: none;">
+                      <div class="drawing-toolbar">
+                        <input type="color" id="drawingColorPicker" value="#000000" title="Cor do traço">
+                        <input type="range" id="drawingLineWidth" min="1" max="20" value="2" title="Espessura do traço">
+                        <button id="clearDrawingBtn" title="Limpar desenho">Limpar</button>
+                      </div>
+                      <div class="drawing-canvas-container">
+                        <canvas id="drawingCanvas"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Leituras Tab -->
+          <div id="readingsTab" class="tab-pane" style="display: none;">
+            <div class="card">
+              <h2 class="card-title">Leituras</h2>
+              <p class="card-subtitle">Adicione e organize textos de livros para leitura.</p>
+              
+              <div class="readings-container">
+                <div class="readings-sidebar">
+                  <div class="readings-header">
+                    <h3>Meus Textos</h3>
+                    <button id="createReadingBtn" class="create-reading-btn">
+                      <span>+</span> Novo
+                    </button>
+                  </div>
+                  <div id="readingsList" class="readings-list">
+                    <!-- Lista de leituras será preenchida dinamicamente -->
+                  </div>
+                </div>
+                
+                <div class="readings-content">
+                  <div id="emptyReadingState" class="empty-reading-state">
+                    <div class="empty-reading-icon">📚</div>
+                    <h3>Nenhum texto selecionado</h3>
+                    <p>Selecione um texto existente ou crie um novo para começar.</p>
+                  </div>
+                  
+                  <div id="readingEditor" class="reading-editor" style="display: none;">
+                    <div class="reading-toolbar">
+                      <input type="text" id="readingTitle" class="reading-title-input" placeholder="Título do livro">
+                      <button id="saveReadingBtn" class="save-reading-btn">Salvar</button>
+                    </div>
+                    <textarea id="readingContent" class="reading-content-textarea" placeholder="Cole aqui o texto do livro..."></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          
+          <!-- Configurações Tab -->
+          <div id="settingsTab" class="tab-pane" style="display: none;">
+            <div class="card">
+              <h2 class="card-title">Configurações</h2>
+              <p class="card-subtitle">Personalize suas notificações e preferências.</p>
+              
+              <div class="notification-toggle">
+                <div class="notification-info">
+                  <h3>Notificações</h3>
+                  <p>Receba lembretes para completar suas missões diárias</p>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" id="notificationToggle">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              
+              <div id="notificationSettings" style="display: none;">
+                <h3>Horários de Notificação</h3>
+                <p>Defina os horários em que deseja receber notificações</p>
+                
+                <div class="message info" style="margin-bottom: 1rem;">
+                  <strong>Nota importante:</strong> As notificações programadas funcionarão apenas quando o aplicativo estiver aberto no navegador. Para lembretes regulares, recomendamos usar os alarmes do seu dispositivo ou um aplicativo dedicado de lembretes.
+                </div>
+                
+                <div id="notificationTimes" class="time-tags">
+                  <!-- Horários serão preenchidos dinamicamente -->
+                </div>
+                
+                <div class="time-input">
+                  <input type="time" id="newNotificationTime" placeholder="Adicionar novo horário">
+                  <button id="addNotificationTime">Adicionar</button>
+                </div>
+                
+                <button id="testNotificationBtn" class="btn" style="margin-top: 1rem;">Testar Notificação</button>
+                
+                <div id="notificationMessage" class="message" style="display: none;"></div>
+              </div>
+              
+              <div class="instructions">
+                <h3>Como Receber Notificações</h3>
+                
+                <div class="instruction-step">
+                  <h3>1. No computador (Chrome)</h3>
+                  <p>Para receber notificações no Chrome:</p>
+                  <ul>
+                    <li>Clique no ícone de cadeado na barra de endereço</li>
+                    <li>Selecione "Notificações"</li>
+                    <li>Escolha "Permitir"</li>
+                  </ul>
+                </div>
+                
+                <div class="instruction-step">
+                  <h3>2. No computador (Firefox)</h3>
+                  <p>Para receber notificações no Firefox:</p>
+                  <ul>
+                    <li>Clique no ícone de informações na barra de endereço</li>
+                    <li>Selecione "Permissões"</li>
+                    <li>Ative "Enviar Notificações"</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="instruction-step">
+                <h3>3. No celular (Android)</h3>
+                <p>Para receber notificações no celular, adicione o Cristão Master à tela inicial:</p>
+                <ul>
+                  <li>No Chrome, toque no menu (três pontos)</li>
+                  <li>Selecione "Adicionar à tela inicial"</li>
+                  <li>Confirme a adição</li>
+                </ul>
+              </div>
+              
+              <div class="instruction-step">
+                <h3>4. No celular (iOS)</h3>
+                <p>Para receber notificações no iPhone:</p>
+                <ul>
+                  <li>No Safari, toque no ícone de compartilhamento</li>
+                  <li>Selecione "Adicionar à Tela de Início"</li>
+                  <li>Confirme a adição</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <p>☞ Não burle, a confiança é a base do caráter. ☜</p>
+         <p>App Criado por: Matheus Souza ™</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Missões possíveis
+    const MISSOES_POSSIVEIS = [
+      // Missões fáceis (2 pontos)
+      { id: 1, nome: 'Ler um capítulo da Bíblia', descricao: 'Fortaleça sua fé com a leitura da Palavra de Deus', dificuldade: 'facil', pontos: 4 },
+      { id: 2, nome: 'Orar por 5 minutos', descricao: 'Dedique um tempo para conversar com Deus', dificuldade: 'facil', pontos: 4 },
+      { id: 3, nome: 'Memorizar um versículo bíblico', descricao: 'Guarde a Palavra de Deus em seu coração', dificuldade: 'facil', pontos: 4 },
+      { id: 4, nome: 'Ouvir uma música gospel', descricao: 'Eleve seu espírito com louvor e adoração', dificuldade: 'facil', pontos: 4 },
+      { id: 5, nome: 'Agradecer a Deus por 3 bênçãos recebidas hoje', descricao: 'Cultive um coração grato', dificuldade: 'facil', pontos: 4 },
+      { id: 6, nome: 'Compartilhar um versículo com um amigo', descricao: 'Espalhe a Palavra de Deus', dificuldade: 'facil', pontos: 4 },
+      { id: 7, nome: 'Fazer uma oração antes de uma refeição', descricao: 'Agradeça a Deus pelo alimento recebido', dificuldade: 'facil', pontos: 4 },
+      { id: 8, nome: 'Assistir a um vídeo de 5 minutos sobre ensinamentos bíblicos', descricao: 'Aprenda mais sobre a Palavra de Deus', dificuldade: 'facil', pontos: 4 },
+      { id: 9, nome: 'Ler um salmo', descricao: 'Encontre conforto e inspiração nos Salmos', dificuldade: 'facil', pontos: 4 },
+      { id: 10, nome: 'Fazer uma pequena reflexão sobre um versículo', descricao: 'Medite na Palavra e aplique-a em sua vida', dificuldade: 'facil', pontos: 4 },
+      { id: 11, nome: 'Orar por um familiar específico', descricao: 'Interceda por alguém de sua família', dificuldade: 'facil', pontos: 4 },
+      { id: 12, nome: 'Fazer uma pausa de 5 minutos para meditar em um versículo', descricao: 'Reflita profundamente sobre a Palavra', dificuldade: 'facil', pontos: 4 },
+      { id: 13, nome: 'Anotar um versículo que tocou seu coração', descricao: 'Registre as revelações que Deus lhe dá', dificuldade: 'facil', pontos: 4 },
+      { id: 14, nome: 'Agradecer a Deus por algo específico', descricao: 'Reconheça as bênçãos em sua vida', dificuldade: 'facil', pontos: 4 },
+      { id: 15, nome: 'Orar pelo seu pastor ou líder espiritual', descricao: 'Interceda por aqueles que cuidam de seu crescimento espiritual', dificuldade: 'facil', pontos: 4 },
+      
+      // Missões difíceis (4 pontos)
+      { id: 16, nome: 'Ler 3 capítulos da Bíblia', descricao: 'Aprofunde-se no estudo da Palavra de Deus', dificuldade: 'dificil', pontos: 6 },
+      { id: 17, nome: 'Fazer um estudo bíblico de 15 minutos', descricao: 'Dedique tempo para entender melhor as Escrituras', dificuldade: 'dificil', pontos: 6 },
+      { id: 18, nome: 'Orar por 15 minutos', descricao: 'Tenha um tempo mais profundo de comunhão com Deus', dificuldade: 'dificil', pontos: 6 },
+      { id: 19, nome: 'Memorizar uma passagem bíblica (3-5 versículos)', descricao: 'Guarde porções maiores da Palavra em seu coração', dificuldade: 'dificil', pontos: 6 },
+      { id: 20, nome: 'Fazer um devocional completo', descricao: 'Dedique um tempo de qualidade para leitura, meditação e oração', dificuldade: 'dificil', pontos: 6 },
+      { id: 21, nome: 'Escrever um resumo de um capítulo bíblico', descricao: 'Aprofunde seu entendimento das Escrituras', dificuldade: 'dificil', pontos: 6 },
+      { id: 22, nome: 'Orar por 3 pessoas diferentes com necessidades específicas', descricao: 'Interceda por aqueles que precisam', dificuldade: 'dificil', pontos: 6 },
+      { id: 23, nome: 'Fazer um jejum de redes sociais por 1 hora para leitura bíblica', descricao: 'Dedique tempo exclusivo para Deus', dificuldade: 'dificil', pontos: 6 },
+      { id: 24, nome: 'Assistir a uma pregação completa', descricao: 'Alimente-se da Palavra pregada', dificuldade: 'dificil', pontos: 6 },
+      { id: 25, nome: 'Compartilhar seu testemunho com alguém', descricao: 'Conte o que Deus tem feito em sua vida', dificuldade: 'dificil', pontos: 6 }
+    ];
+
+    // Estado da aplicação
+    let state = {
+      pontos: 0,
+      missoesConcluidas: 0,
+      historico: [],
+      missoesRealizadasHoje: [],
+      missoesDiarias: 0, // Contador de missões diárias (limite de 4)
+      limiteDiario: 4, // Limite de missões por dia
+      notificacoes: {
+        ativado: false,
+        horarios: ['09:00', '15:00', '19:00'],
+        permissaoConcedida: false
+      },
+      missaoAtual: null,
+      tempoRestante: 0,
+      intervaloTimer: null
+    };
+
+    // Elementos DOM
+    const elements = {
+      splashScreen: document.getElementById('splashScreen'),
+      app: document.getElementById('app'),
+      pointsDisplay: document.getElementById('pointsDisplay'),
+      missionsCompleted: document.getElementById('missionsCompleted'),
+      missionStart: document.getElementById('missionStart'),
+      activeMission: document.getElementById('activeMission'),
+      missionTitle: document.getElementById('missionTitle'),
+      missionDescription: document.getElementById('missionDescription'),
+      missionDifficulty: document.getElementById('missionDifficulty'),
+      timerDisplay: document.getElementById('timerDisplay'),
+      timerProgress: document.getElementById('timerProgress'),
+      missionMessage: document.getElementById('missionMessage'),
+      startMissionBtn: document.getElementById('startMissionBtn'),
+      completeMissionBtn: document.getElementById('completeMissionBtn'),
+      abandonMissionBtn: document.getElementById('abandonMissionBtn'),
+      historyList: document.getElementById('historyList'),
+      rewardsList: document.getElementById('rewardsList'),
+      notificationToggle: document.getElementById('notificationToggle'),
+      notificationSettings: document.getElementById('notificationSettings'),
+      notificationTimes: document.getElementById('notificationTimes'),
+      newNotificationTime: document.getElementById('newNotificationTime'),
+      addNotificationTime: document.getElementById('addNotificationTime'),
+      testNotificationBtn: document.getElementById('testNotificationBtn'),
+      notificationMessage: document.getElementById('notificationMessage'),
+      tabs: document.querySelectorAll('.tab'),
+      tabContent: document.getElementById('tabContent')
+    };
+
+    // Verificar se é um novo dia
+    function checkNewDay() {
+      const ultimoAcesso = localStorage.getItem('msaude_ultimoAcesso');
+      const hoje = new Date().toDateString();
+      
+      if (ultimoAcesso !== hoje) {
+        state.missoesConcluidas = 0;
+        state.missoesRealizadasHoje = [];
+        state.missoesDiarias = 0; // Resetar contador de missões diárias
+        localStorage.setItem('msaude_ultimoAcesso', hoje);
+        localStorage.setItem('msaude_missoesConcluidas', '0');
+        localStorage.setItem('msaude_missoesRealizadasHoje', JSON.stringify([]));
+        localStorage.setItem('msaude_missoesDiarias', '0'); // Salvar contador resetado
+        
+        // Mostrar mensagem de reset
+        showMessage('Novo dia! Suas missões foram resetadas.', 'info');
+      }
+    }
+    
+    // Carregar dados do localStorage
+    function loadFromLocalStorage() {
+      const storedPontos = localStorage.getItem('msaude_pontos');
+      const storedMissoesConcluidas = localStorage.getItem('msaude_missoesConcluidas');
+      const storedHistorico = localStorage.getItem('msaude_historico');
+      const storedMissoesRealizadasHoje = localStorage.getItem('msaude_missoesRealizadasHoje');
+      const storedNotificacoes = localStorage.getItem('msaude_notificacoes');
+      const storedMissoesDiarias = localStorage.getItem('msaude_missoesDiarias');
+      
+      // Sempre obter os pontos mais atualizados do localStorage
+      if (storedPontos) state.pontos = parseInt(storedPontos);
+      if (storedMissoesConcluidas) state.missoesConcluidas = parseInt(storedMissoesConcluidas);
+      if (storedHistorico) state.historico = JSON.parse(storedHistorico);
+      if (storedMissoesRealizadasHoje) state.missoesRealizadasHoje = JSON.parse(storedMissoesRealizadasHoje);
+      if (storedNotificacoes) state.notificacoes = JSON.parse(storedNotificacoes);
+      if (storedMissoesDiarias) state.missoesDiarias = parseInt(storedMissoesDiarias);
+      
+      // Verificar se é um novo dia
+      checkNewDay();
+    }
+
+    // Salvar dados no localStorage
+    function saveToLocalStorage() {
+      localStorage.setItem('msaude_pontos', state.pontos.toString());
+      localStorage.setItem('msaude_missoesConcluidas', state.missoesConcluidas.toString());
+      localStorage.setItem('msaude_historico', JSON.stringify(state.historico));
+      localStorage.setItem('msaude_missoesRealizadasHoje', JSON.stringify(state.missoesRealizadasHoje));
+      localStorage.setItem('msaude_notificacoes', JSON.stringify(state.notificacoes));
+      localStorage.setItem('msaude_missoesDiarias', state.missoesDiarias.toString());
+    }
+
+    // Atualizar interface
+    function updateUI() {
+      // Garantir que estamos usando os pontos mais atualizados do localStorage
+      const pontosAtuais = parseInt(localStorage.getItem('msaude_pontos') || '0');
+      state.pontos = pontosAtuais;
+      
+      // Atualizar pontos e missões concluídas
+      elements.pointsDisplay.textContent = `${state.pontos} pontos`;
+      elements.missionsCompleted.textContent = state.missoesConcluidas;
+      
+      // Verificar limite de missões diárias e atualizar botão de iniciar missão
+      if (state.missoesDiarias >= state.limiteDiario) {
+        elements.startMissionBtn.disabled = true;
+        elements.startMissionBtn.textContent = `Limite de ${state.limiteDiario} missões diárias atingido`;
+      } else {
+        elements.startMissionBtn.disabled = false;
+        elements.startMissionBtn.textContent = "Iniciar Nova Missão";
+      }
+      
+      // Atualizar histórico
+      updateHistoryList();
+      
+      // Atualizar botões de recompensas
+      updateRewardButtons();
+      
+      // Atualizar configurações de notificações
+      elements.notificationToggle.checked = state.notificacoes.ativado;
+      elements.notificationSettings.style.display = state.notificacoes.ativado ? 'block' : 'none';
+      updateNotificationTimes();
+    }
+
+    // Atualizar lista de histórico
+    function updateHistoryList() {
+      if (state.historico.length === 0) {
+        elements.historyList.innerHTML = `
+          <div class="history-item">
+            <div>
+              <div class="history-mission">Nenhuma missão realizada ainda</div>
+              <div class="history-date">Complete missões para ver seu histórico</div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+      
+      elements.historyList.innerHTML = '';
+      
+      // Ordenar histórico por data (mais recente primeiro)
+      const sortedHistorico = [...state.historico].sort((a, b) => {
+        return new Date(b.data) - new Date(a.data);
+      });
+      
+      sortedHistorico.forEach(item => {
+        const date = new Date(item.data);
+        const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+        
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        historyItem.innerHTML = `
+          <div>
+            <div class="history-mission">${item.nomeMissao} 
+              <span class="mission-points">${item.pontos} pontos</span>
+            </div>
+            <div class="history-date">${formattedDate}</div>
+          </div>
+          <div class="history-status ${item.concluida ? 'completed' : 'failed'}">
+            ${item.concluida ? 'Concluída' : 'Perdida'}
+          </div>
+        `;
+        
+        elements.historyList.appendChild(historyItem);
+      });
+    }
+
+    // Atualizar botões de recompensas
+    function updateRewardButtons() {
+      const rewardButtons = document.querySelectorAll('.reward-btn');
+      
+      rewardButtons.forEach(button => {
+        const pontosNecessarios = parseInt(button.getAttribute('data-reward-points'));
+        button.disabled = state.pontos < pontosNecessarios;
+      });
+    }
+    
+    // Resgatar recompensa
+    function redeemReward(rewardId, pontosNecessarios, rewardName) {
+      // Verificar se tem pontos suficientes
+      // Obter pontos atuais do localStorage para garantir que estamos usando o valor mais atualizado
+      const pontosAtuais = parseInt(localStorage.getItem('msaude_pontos') || '0');
+      
+      if (pontosAtuais < pontosNecessarios) {
+        showMessage('Você não tem pontos suficientes para resgatar esta recompensa!', 'error');
+        return;
+      }
+      
+      // Consumir pontos
+      state.pontos = pontosAtuais - pontosNecessarios;
+      saveToLocalStorage();
+      updateUI();
+      
+      // Mostrar mensagem de sucesso
+      showMessage(`Recompensa "${rewardName}" resgatada com sucesso!`, 'success');
+      
+      // Redirecionar para WhatsApp
+      const mensagem = `Eu resgatei o item ${rewardName}, segue o comprovante abaixo, espero a recompensa.`;
+      const whatsappUrl = `https://wa.me/5571983034449?text=${encodeURIComponent(mensagem)}`;
+      window.open(whatsappUrl, '_blank');
+    }
+
+    // Atualizar horários de notificação
+    function updateNotificationTimes() {
+      elements.notificationTimes.innerHTML = '';
+      
+      state.notificacoes.horarios.forEach(horario => {
+        const timeTag = document.createElement('div');
+        timeTag.className = 'time-tag';
+        timeTag.innerHTML = `
+          ${horario}
+          <button class="remove-time" data-time="${horario}">×</button>
+        `;
+        elements.notificationTimes.appendChild(timeTag);
+      });
+      
+      // Adicionar event listeners para botões de remoção
+      document.querySelectorAll('.remove-time').forEach(button => {
+        button.addEventListener('click', function() {
+          const timeToRemove = this.getAttribute('data-time');
+          removeNotificationTime(timeToRemove);
+        });
+      });
+    }
+
+    // Adicionar horário de notificação
+    function addNotificationTime(time) {
+      if (!time || state.notificacoes.horarios.includes(time)) return;
+      
+      state.notificacoes.horarios.push(time);
+      state.notificacoes.horarios.sort();
+      saveToLocalStorage();
+      updateNotificationTimes();
+      
+      // Mostrar mensagem de sucesso
+      showNotificationMessage(`Horário ${time} adicionado com sucesso!`, 'success');
+    }
+
+    // Remover horário de notificação
+    function removeNotificationTime(time) {
+      state.notificacoes.horarios = state.notificacoes.horarios.filter(t => t !== time);
+      saveToLocalStorage();
+      updateNotificationTimes();
+      
+      // Mostrar mensagem de sucesso
+      showNotificationMessage(`Horário ${time} removido com sucesso!`, 'success');
+    }
+
+    // Mostrar mensagem de notificação
+    function showNotificationMessage(text, type) {
+      elements.notificationMessage.textContent = text;
+      elements.notificationMessage.className = `message ${type}`;
+      elements.notificationMessage.style.display = 'block';
+      
+      // Esconder mensagem após 3 segundos
+      setTimeout(() => {
+        elements.notificationMessage.style.display = 'none';
+      }, 3000);
+    }
+
+    // Solicitar permissão para notificações
+    function requestNotificationPermission() {
+      if (!('Notification' in window)) {
+        showNotificationMessage('Este navegador não suporta notificações desktop!', 'error');
+        return;
+      }
+      
+      if (Notification.permission === 'granted') {
+        state.notificacoes.permissaoConcedida = true;
+        saveToLocalStorage();
+        return;
+      }
+      
+      if (Notification.permission !== 'denied') {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            state.notificacoes.permissaoConcedida = true;
+            saveToLocalStorage();
+            showNotificationMessage('Permissão para notificações concedida!', 'success');
+          } else {
+            showNotificationMessage('Permissão para notificações negada!', 'error');
+          }
+        });
+      }
+    }
+
+    // Enviar notificação
+    function sendNotification(title, body) {
+      if (!state.notificacoes.permissaoConcedida || !state.notificacoes.ativado) return;
+      
+      if (Notification.permission === 'granted') {
+        const notification = new Notification(title, {
+          body: body,
+          icon: 'https://i.imgur.com/EvMiYpM.png'
+        });
+        
+        notification.onclick = function() {
+          window.focus();
+          this.close();
+        };
+      }
+    }
+
+    // Verificar horários de notificação
+    function checkNotificationTimes() {
+      if (!state.notificacoes.ativado || !state.notificacoes.permissaoConcedida) return;
+      
+      const now = new Date();
+      const currentHour = now.getHours().toString().padStart(2, '0');
+      const currentMinute = now.getMinutes().toString().padStart(2, '0');
+      const currentTime = `${currentHour}:${currentMinute}`;
+      
+      state.notificacoes.horarios.forEach(time => {
+        if (time === currentTime) {
+          sendNotification('Cristão Master', 'Hora de completar uma missão de saúde!');
+        }
+      });
+    }
+
+    // Iniciar missão aleatória
+    function startRandomMission() {
+      // Verificar se o limite diário foi atingido
+      if (state.missoesDiarias >= state.limiteDiario) {
+        showMessage(`Você já atingiu o limite de ${state.limiteDiario} missões diárias. Volte amanhã!`, 'info');
+        return;
+      }
+      
+      // Filtrar missões que ainda não foram realizadas hoje
+      const missoesDisponiveis = MISSOES_POSSIVEIS.filter(missao => 
+        !state.missoesRealizadasHoje.includes(missao.id)
+      );
+      
+      // Se todas as missões já foram realizadas, permitir repetir
+      const missoesFiltradas = missoesDisponiveis.length > 0 ? missoesDisponiveis : MISSOES_POSSIVEIS;
+      
+      // Incrementar contador de missões diárias
+      state.missoesDiarias++;
+      saveToLocalStorage();
+      
+      // Selecionar missão aleatória
+      const randomIndex = Math.floor(Math.random() * missoesFiltradas.length);
+      const missaoSelecionada = missoesFiltradas[randomIndex];
+      
+      // Definir tempo para todas as missões
+      const tempoMissao = 1800; // 30 minutos para todas as missões
+      
+      // Atualizar estado
+      state.missaoAtual = {
+        ...missaoSelecionada,
+        tempoTotal: tempoMissao,
+        tempoRestante: tempoMissao
+      };
+      
+      // Atualizar interface
+      elements.missionTitle.textContent = state.missaoAtual.nome;
+      elements.missionDescription.textContent = state.missaoAtual.descricao;
+      elements.missionDifficulty.textContent = `Dificuldade: ${state.missaoAtual.dificuldade === 'facil' ? 'Fácil' : 'Difícil'} (${state.missaoAtual.pontos} pontos)`;
+      
+      // Iniciar timer
+      startTimer();
+      
+      // Mostrar seção de missão ativa
+      elements.missionStart.style.display = 'none';
+      elements.activeMission.style.display = 'block';
+      elements.missionMessage.style.display = 'none';
+    }
+
+    // Iniciar timer
+    function startTimer() {
+      // Limpar intervalo anterior se existir
+      if (state.intervaloTimer) {
+        clearInterval(state.intervaloTimer);
+      }
+      
+      // Atualizar display inicial
+      updateTimerDisplay();
+      
+      // Iniciar intervalo
+      state.intervaloTimer = setInterval(() => {
+        // Decrementar tempo
+        state.missaoAtual.tempoRestante--;
+        
+        // Verificar se o tempo acabou
+        if (state.missaoAtual.tempoRestante <= 0) {
+          clearInterval(state.intervaloTimer);
+          failMission();
+          return;
+        }
+        
+        // Atualizar display
+        updateTimerDisplay();
+      }, 1000);
+    }
+
+    // Atualizar display do timer
+    function updateTimerDisplay() {
+      const minutes = Math.floor(state.missaoAtual.tempoRestante / 60);
+      const seconds = state.missaoAtual.tempoRestante % 60;
+      
+      elements.timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      
+      // Calcular porcentagem
+      const percentagem = (state.missaoAtual.tempoRestante / state.missaoAtual.tempoTotal) * 100;
+      elements.timerProgress.style.width = `${percentagem}%`;
+      
+      // Adicionar classe de perigo se estiver acabando o tempo
+      if (state.missaoAtual.tempoRestante <= 10) {
+        elements.timerDisplay.classList.add('danger');
+        elements.timerProgress.classList.add('danger');
+      } else {
+        elements.timerDisplay.classList.remove('danger');
+        elements.timerProgress.classList.remove('danger');
+      }
+    }
+
+    // Completar missão
+    function completeMission() {
+      // Parar timer
+      clearInterval(state.intervaloTimer);
+      
+      // Tocar efeito sonoro positivo
+      document.getElementById('sound-parabens').play();
+      
+      // Obter pontos atuais do localStorage para garantir que não sobrescreva pontos do quiz
+      const pontosAtuais = parseInt(localStorage.getItem('msaude_pontos') || '0');
+      
+      // Adicionar pontos da missão aos pontos atuais do localStorage
+      state.pontos = pontosAtuais + state.missaoAtual.pontos;
+      
+      // Incrementar contador de missões
+      state.missoesConcluidas++;
+      
+      // Adicionar ao histórico
+      state.historico.push({
+        id: state.missaoAtual.id,
+        nomeMissao: state.missaoAtual.nome,
+        pontos: state.missaoAtual.pontos,
+        data: new Date().toISOString(),
+        concluida: true
+      });
+      
+      // Adicionar à lista de missões realizadas hoje
+      state.missoesRealizadasHoje.push(state.missaoAtual.id);
+      
+      // Salvar dados
+      saveToLocalStorage();
+      
+      // Resetar missão atual
+      state.missaoAtual = null;
+      
+      // Atualizar interface
+      elements.missionStart.style.display = 'block';
+      elements.activeMission.style.display = 'none';
+      
+      // Mostrar mensagem de sucesso
+      showMessage('Missão completada com sucesso! Pontos adicionados.', 'success');
+      
+      // Atualizar UI
+      updateUI();
+    }
+    // Falhar missão
+    function failMission() {
+      // Adicionar ao histórico
+      state.historico.push({
+        id: state.missaoAtual.id,
+        nomeMissao: state.missaoAtual.nome,
+        pontos: 0,
+        data: new Date().toISOString(),
+        concluida: false
+      });
+      
+      // Adicionar à lista de missões realizadas hoje
+      state.missoesRealizadasHoje.push(state.missaoAtual.id);
+      
+      // Já contabilizamos esta missão no contador diário ao iniciar
+      // Não precisamos incrementar novamente
+      
+      // Salvar dados
+      saveToLocalStorage();
+      
+      // Resetar missão atual
+      state.missaoAtual = null;
+      
+      // Atualizar interface
+      elements.missionStart.style.display = 'block';
+      elements.activeMission.style.display = 'none';
+      
+      // Mostrar mensagem de falha
+      showMessage('Tempo esgotado! Missão não completada.', 'error');
+      
+      // Atualizar UI
+      updateUI();
+    }
+
+    // Abandonar missão
+    function abandonMission() {
+      // Criar modal personalizado para confirmação
+      const modalContainer = document.createElement('div');
+      modalContainer.className = 'custom-modal-container';
+      modalContainer.innerHTML = `
+        <div class="custom-modal">
+          <div class="custom-modal-header">
+            <h3>Abandonar Missão</h3>
+          </div>
+          <div class="custom-modal-body">
+            <p>Tem certeza que deseja abandonar esta missão?</p>
+            <p>Você não receberá pontos e isso contará como uma missão diária utilizada.</p>
+            <p>Você ainda terá <strong>${state.limiteDiario - state.missoesDiarias}</strong> missões disponíveis hoje.</p>
+          </div>
+          <div class="custom-modal-footer">
+            <button id="cancelAbandon" class="modal-btn cancel">Cancelar</button>
+            <button id="confirmAbandon" class="modal-btn confirm">Abandonar</button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modalContainer);
+      
+      // Adicionar estilos para o modal
+      const modalStyle = document.createElement('style');
+      modalStyle.textContent = `
+        .custom-modal-container {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1000;
+        }
+        .custom-modal {
+          background: white;
+          border-radius: 16px;
+          width: 90%;
+          max-width: 400px;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+          animation: modalFadeIn 0.3s ease-out;
+        }
+        .custom-modal-header {
+          padding: 1.5rem;
+          border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+          text-align: center;
+        }
+        .custom-modal-header h3 {
+          margin: 0;
+          color: var(--primary-700);
+          font-weight: 600;
+        }
+        .custom-modal-body {
+          padding: 1.5rem;
+          text-align: center;
+        }
+        .custom-modal-body p {
+          margin-bottom: 0.75rem;
+          color: #4b5563;
+        }
+        .custom-modal-footer {
+          padding: 1rem 1.5rem;
+          display: flex;
+          justify-content: space-between;
+          border-top: 1px solid rgba(229, 231, 235, 0.5);
+        }
+        .modal-btn {
+          padding: 0.75rem 1.5rem;
+          border-radius: 12px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border: none;
+          min-width: 120px;
+        }
+        .modal-btn.cancel {
+          background-color: #f3f4f6;
+          color: #4b5563;
+        }
+        .modal-btn.cancel:hover {
+          background-color: #e5e7eb;
+        }
+        .modal-btn.confirm {
+          background: linear-gradient(135deg, #f87171, var(--error));
+          color: white;
+          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        }
+        .modal-btn.confirm:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+        }
+        @keyframes modalFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `;
+      document.head.appendChild(modalStyle);
+      
+      // Adicionar event listeners
+      document.getElementById('cancelAbandon').addEventListener('click', () => {
+        document.body.removeChild(modalContainer);
+        document.head.removeChild(modalStyle);
+      });
+             document.getElementById('confirmAbandon').addEventListener('click', () => {
+        // Parar timer
+        clearInterval(state.intervaloTimer);
+        
+        // Tocar efeito sonoro negativo
+        document.getElementById('sound-desistiu').play();
+        
+        // Adicionar ao histórico
+        state.historico.push({
+          id: state.missaoAtual.id,
+          nomeMissao: state.missaoAtual.nome,
+          pontos: 0,
+          data: new Date().toISOString(),
+          concluida: false
+        });
+        
+        // Adicionar à lista de missões realizadas hoje
+        state.missoesRealizadasHoje.push(state.missaoAtual.id);
+        
+        // Já contabilizamos esta missão no contador diário ao iniciar
+        // Não precisamos incrementar novamente
+        
+        // Salvar dados
+        saveToLocalStorage();
+        
+        // Resetar missão atual
+        state.missaoAtual = null;
+        
+        // Atualizar interface
+        elements.missionStart.style.display = 'block';
+        elements.activeMission.style.display = 'none';
+        
+        // Mostrar mensagem de abandono
+        showMessage('Missão abandonada.', 'info');
+        
+        // Atualizar UI
+        updateUI();
+        
+        // Remover modal
+        document.body.removeChild(modalContainer);
+        document.head.removeChild(modalStyle);
+      });
+    }
+
+    // Mostrar mensagem
+    function showMessage(text, type) {
+      elements.missionMessage.textContent = text;
+      elements.missionMessage.className = `message ${type}`;
+      elements.missionMessage.style.display = 'block';
+      
+      // Esconder mensagem após 3 segundos
+      setTimeout(() => {
+        elements.missionMessage.style.display = 'none';
+      }, 3000);
+    }
+
+    // Alternar entre abas
+    function switchTab(tabId) {
+      // Remover classe active de todas as abas
+      elements.tabs.forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Adicionar classe active à aba selecionada
+      document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+      
+      // Esconder todos os conteúdos de aba
+      const tabPanes = document.querySelectorAll('.tab-pane');
+      tabPanes.forEach(pane => {
+        pane.style.display = 'none';
+      });
+      
+      // Mostrar conteúdo da aba selecionada
+      document.getElementById(tabId).style.display = 'block';
+      
+      // Atualizar a interface para garantir que os dados estejam atualizados
+      // Isso é especialmente importante quando voltamos para a aba de missões após completar um quiz
+      updateUI();
+    }
+
+    // Inicializar aplicação
+    function init() {
+      // Carregar dados do localStorage
+      loadFromLocalStorage();
+      
+      // Atualizar interface
+      updateUI();
+      
+      // Adicionar event listeners
+      elements.startMissionBtn.addEventListener('click', startRandomMission);
+      elements.completeMissionBtn.addEventListener('click', completeMission);
+      elements.abandonMissionBtn.addEventListener('click', abandonMission);
+      
+      elements.tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          switchTab(this.getAttribute('data-tab'));
+        });
+      });
+      
+      // Event listeners para recompensas
+      const rewardButtons = document.querySelectorAll('.reward-btn');
+      rewardButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const rewardId = this.getAttribute('data-reward-id');
+          const pontosNecessarios = parseInt(this.getAttribute('data-reward-points'));
+          const rewardName = this.getAttribute('data-reward-name');
+          redeemReward(rewardId, pontosNecessarios, rewardName);
+        });
+      });
+      
+      // Event listeners para notificações
+      elements.notificationToggle.addEventListener('change', function() {
+        state.notificacoes.ativado = this.checked;
+        elements.notificationSettings.style.display = this.checked ? 'block' : 'none';
+        
+        if (this.checked && !state.notificacoes.permissaoConcedida) {
+          requestNotificationPermission();
+        }
+        
+        saveToLocalStorage();
+      });
+      
+      elements.addNotificationTime.addEventListener('click', function() {
+        const newTime = elements.newNotificationTime.value;
+        if (newTime) {
+          addNotificationTime(newTime);
+          elements.newNotificationTime.value = '';
+        }
+      });
+      
+      elements.testNotificationBtn.addEventListener('click', function() {
+        if (!state.notificacoes.permissaoConcedida) {
+          requestNotificationPermission();
+        } else {
+          sendNotification('Teste de Notificação', 'Esta é uma notificação de teste do Cristão Master!');
+          showNotificationMessage('Notificação de teste enviada!', 'success');
+        }
+      });
+      
+      // Verificar notificações a cada minuto
+      setInterval(checkNotificationTimes, 60000);
+      
+      // Esconder splash screen após 2 segundos
+      setTimeout(() => {
+        elements.splashScreen.classList.add('hidden');
+        elements.app.style.display = 'block';
+      }, 2000);
+    }
+
+    // Iniciar aplicação quando o DOM estiver carregado
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+  <script src="quiz.js"></script>
+  <script src="notes.js"></script>
+  <script src="drawing.js"></script>
+  <script src="chatgpt.js"></script>
+  <script src="quiz_script.js"></script>
+</body>
+</html>
