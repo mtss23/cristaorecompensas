@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Tocar efeito sonoro de acordo com o resultado
         if (acertou) {
             // Tocar som positivo para resposta correta
-            playSound('positive.mp3');
+            playSound('acertou.mp3');
             
             // Garantir que estamos adicionando um número
             const pontosGanhos = Number(quizState.pontosPorQuestao);
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log("Pontos adicionados:", pontosGanhos, "Total do quiz:", quizState.pontuacaoTotal);
         } else {
             // Tocar som negativo para resposta incorreta
-            playSound('negative.mp3');
+            playSound('errou.mp3');
         }
         
         // Atualizar interface
