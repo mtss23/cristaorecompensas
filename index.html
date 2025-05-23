@@ -797,6 +797,40 @@
         width: 100%;
       }
     }
+
+    /* Ajustes para layout mobile do Quiz */
+    @media (max-width: 640px) {
+      .quiz-controls .dificuldade-container {
+        flex-direction: column; /* Empilha os elementos verticalmente */
+        align-items: stretch; /* Estica os itens para preencher a largura */
+        gap: 10px; /* Espaço entre os elementos empilhados */
+      }
+      .quiz-controls .dificuldade-container > div { /* Seleciona os divs filhos diretos */
+        width: 100%; /* Faz os filhos ocuparem a largura total */
+        margin-left: 0 !important; /* Remove margem esquerda que pode existir */
+        display: flex; /* Garante flex para alinhar itens internos */
+        align-items: center; /* Centraliza verticalmente itens internos */
+        justify-content: space-between; /* Espaça itens internos */
+      }
+       .quiz-controls .dificuldade-container > div:first-child {
+         justify-content: flex-start; /* Alinha o seletor à esquerda */
+         gap: 10px;
+       }
+      .quiz-controls .dificuldade-container > div:last-child { /* Div com badge e pontos */
+        justify-content: flex-start; /* Alinha badge e pontos à esquerda */
+        gap: 8px;
+        padding: 5px 0; /* Adiciona um pouco de padding vertical */
+      }
+      .quiz-controls .pontos-info {
+          white-space: normal; /* Permite quebra de linha se necessário, mas o layout deve evitar */
+          font-size: 0.9rem; /* Reduz um pouco a fonte se necessário */
+          text-align: left; /* Garante alinhamento à esquerda */
+          flex-shrink: 1; /* Permite encolher se necessário */
+      }
+      .quiz-controls .dificuldade-badge {
+          flex-shrink: 0; /* Evita que o badge encolha */
+      }
+    }
   </style>
 </head>
 <body>
@@ -999,12 +1033,13 @@
                   <div class="quiz-controls">
                     <div class="dificuldade-container" style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
                       <div style="display: flex; align-items: center; background: linear-gradient(135deg, var(--primary-50), white); padding: 8px 12px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);">
-                        <label for="selecionar-dificuldade" style="margin-right: 10px; font-weight: 500; color: var(--primary-700);">Dificuldade:</label>
-                        <select id="selecionar-dificuldade" style="padding: 6px 10px; border-radius: 8px; border: 1px solid var(--primary-200); background-color: white; font-family: 'Poppins', sans-serif; color: var(--primary-700); outline: none; cursor: pointer; transition: all 0.2s ease;">
-                          <option value="facil">Fácil</option>
-                          <option value="medio">Médio</option>
-                          <option value="dificil">Difícil</option>
-                        </select>
+                        <label for="selecionar-dificuldade-hidden" style="margin-right: 10px; font-weight: 500; color: var(--primary-700);">Dificuldade:</label>
+                        <input type="hidden" id="selecionar-dificuldade-hidden" value="facil"> <!-- Campo oculto para armazenar o valor -->
+                        <div class="custom-select-dificuldade" style="display: flex; gap: 8px;">
+                          <button class="dificuldade-btn active" data-value="facil" style="padding: 6px 12px; border-radius: 8px; border: 1px solid var(--primary-200); background-color: var(--primary-100); color: var(--primary-700); font-family: 'Poppins', sans-serif; cursor: pointer; transition: all 0.2s ease;">Fácil</button>
+                          <button class="dificuldade-btn" data-value="medio" style="padding: 6px 12px; border-radius: 8px; border: 1px solid var(--primary-200); background-color: white; color: var(--primary-700); font-family: 'Poppins', sans-serif; cursor: pointer; transition: all 0.2s ease;">Médio</button>
+                          <button class="dificuldade-btn" data-value="dificil" style="padding: 6px 12px; border-radius: 8px; border: 1px solid var(--primary-200); background-color: white; color: var(--primary-700); font-family: 'Poppins', sans-serif; cursor: pointer; transition: all 0.2s ease;">Difícil</button>
+                        </div>
                       </div>
                       <div style="display: flex; align-items: center; margin-left: 5px;">
                         <span id="dificuldade-badge" class="dificuldade-badge facil" style="margin-right: 8px; padding: 5px 10px; border-radius: 8px; font-weight: 500;">Nível fácil</span>

@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Escolher tema baseado na dificuldade selecionada pelo usuário
     function escolherTemaEDificuldade() {
-        const dificuldadeSelecionada = document.getElementById('selecionar-dificuldade').value;
+        const dificuldadeSelecionada = document.getElementById('selecionar-dificuldade-hidden').value; // Ler do input oculto
         
         const temas = [
             { nome: 'Conhecimentos Gerais da Bíblia', array: theLoveDeepspaceFacil, dificuldade: 'facil', pontos: 1.0 },
@@ -134,14 +134,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Escolher aleatoriamente entre os temas da dificuldade selecionada
             temaEscolhido = temasFiltrados[Math.floor(Math.random() * temasFiltrados.length)];
         } else {
-            // Caso especial para 'extra' que não está no seletor
-            if (dificuldadeSelecionada === 'facil') {
-                temaEscolhido = temas.find(tema => tema.dificuldade === 'facil');
-            } else if (dificuldadeSelecionada === 'medio') {
-                temaEscolhido = temas.find(tema => tema.dificuldade === 'medio');
-            } else {
-                temaEscolhido = temas.find(tema => tema.dificuldade === 'dificil');
-            }
+            // Caso padrão para 'facil' se algo der errado ou não houver filtro correspondente
+            temaEscolhido = temas.find(tema => tema.dificuldade === 'facil'); 
         }
         
         quizState.tema = temaEscolhido.nome;
@@ -249,10 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Atualizar interface de dificuldade
-    function atualizarDificuldade() {
-        const seletor = document.getElementById('selecionar-dificuldade');
-        const dificuldade = seletor.value;
-        
+    function atualizarDificuldade(dificuldade) {
         // Atualizar o badge de dificuldade
         elements.dificuldadeBadge.className = `dificuldade-badge ${dificuldade}`;
         
@@ -272,6 +263,28 @@ document.addEventListener('DOMContentLoaded', function() {
         elements.pontosPorQuestao.textContent = pontos.toFixed(1);
     }
 
+    // Função para lidar com a seleção de dificuldade pelos botões
+    function handleDificuldadeButtonClick(event) {
+        const selectedButton = event.target;
+        const dificuldade = selectedButton.dataset.value;
+
+        // Atualiza o valor no input oculto
+        document.getElementById('selecionar-dificuldade-hidden').value = dificuldade;
+
+        // Remove a classe 'active' de todos os botões
+        document.querySelectorAll('.dificuldade-btn').forEach(btn => {
+            btn.classList.remove('active');
+            btn.style.backgroundColor = 'white'; // Reset background
+        });
+
+        // Adiciona a classe 'active' ao botão clicado
+        selectedButton.classList.add('active');
+        selectedButton.style.backgroundColor = 'var(--primary-100)'; // Highlight background
+
+        // Chama a função para atualizar a interface (badge e pontos)
+        atualizarDificuldade(dificuldade);
+    }
+
     // Função para resetar o quiz (útil para testes)
     window.resetarQuiz = function() {
         localStorage.removeItem('quizState');
@@ -283,10 +296,15 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // Event listeners
-    elements.iniciarQuizBtn.addEventListener('click', exibirPergunta);
-    elements.botaoContinuar.addEventListener('click', continuar);
-    document.getElementById('selecionar-dificuldade').addEventListener('change', atualizarDificuldade);
+    elements.iniciarQuizBtn.addEventListener("click", exibirPergunta);
+    elements.botaoContinuar.addEventListener("click", continuar);
+    // Add event listeners for the custom difficulty buttons
+    document.querySelectorAll(".dificuldade-btn").forEach(button => {
+        button.addEventListener("click", handleDificuldadeButtonClick);
+    });
 
     // Inicializar
     carregarEstado();
+    // Initialize difficulty display based on default hidden input value
+    atualizarDificuldade(document.getElementById("selecionar-dificuldade-hidden").value);
 });
