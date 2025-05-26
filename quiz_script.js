@@ -40,25 +40,59 @@ document.addEventListener('DOMContentLoaded', function() {
         pontosPorQuestao: 0,
         pontuacaoTotal: 0,
         perguntasRespondidas: 0,
-        tentativasRestantes: 30
+        tentativasRestantes: 30,
+        ultimaDataUso: null // Adicionado para controle diário
     };
+
+    // Obter a data atual no formato YYYY-MM-DD
+    function getDataAtual() {
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const mes = String(hoje.getMonth() + 1).padStart(2, '0'); // Meses são 0-indexados
+        const dia = String(hoje.getDate()).padStart(2, '0');
+        return `${ano}-${mes}-${dia}`;
+    }
 
     // Carregar estado do localStorage
     function carregarEstado() {
         const savedState = localStorage.getItem('quizState');
+        const dataAtual = getDataAtual();
+        let resetarTentativas = false;
+
         if (savedState) {
             try {
                 const parsedState = JSON.parse(savedState);
+                
+                // Verificar se a data salva é diferente da data atual
+                if (parsedState.ultimaDataUso && parsedState.ultimaDataUso !== dataAtual) {
+                    console.log(`Novo dia detectado (${parsedState.ultimaDataUso} -> ${dataAtual}). Resetando tentativas.`);
+                    resetarTentativas = true;
+                }
+
+                // Carregar estado, resetando tentativas se necessário
                 quizState.pontuacaoTotal = Number(parsedState.pontuacaoTotal) || 0;
-                quizState.perguntasRespondidas = Number(parsedState.perguntasRespondidas) || 0;
-                quizState.tentativasRestantes = parsedState.tentativasRestantes !== undefined ? Number(parsedState.tentativasRestantes) : 30;
+                quizState.perguntasRespondidas = resetarTentativas ? 0 : (Number(parsedState.perguntasRespondidas) || 0);
+                quizState.tentativasRestantes = resetarTentativas ? 30 : (parsedState.tentativasRestantes !== undefined ? Number(parsedState.tentativasRestantes) : 30);
+                quizState.ultimaDataUso = resetarTentativas ? dataAtual : (parsedState.ultimaDataUso || dataAtual);
+
+                // Se resetou, salvar o estado imediatamente com a nova data e tentativas
+                if (resetarTentativas) {
+                    salvarEstado();
+                }
+
             } catch (e) {
                 console.error("Erro ao carregar estado do quiz:", e);
-                // Resetar estado em caso de erro
+                // Resetar estado completo em caso de erro
                 quizState.pontuacaoTotal = 0;
                 quizState.perguntasRespondidas = 0;
                 quizState.tentativasRestantes = 30;
+                quizState.ultimaDataUso = dataAtual;
+                salvarEstado(); // Salva o estado resetado
             }
+        } else {
+            // Se não há estado salvo, inicializa com a data atual
+            quizState.ultimaDataUso = dataAtual;
+            salvarEstado(); // Salva o estado inicial
         }
         
         // Atualizar interface
@@ -82,15 +116,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const estadoParaSalvar = {
             pontuacaoTotal: Number(quizState.pontuacaoTotal),
             perguntasRespondidas: Number(quizState.perguntasRespondidas),
-            tentativasRestantes: Number(quizState.tentativasRestantes)
+            tentativasRestantes: Number(quizState.tentativasRestantes),
+            ultimaDataUso: quizState.ultimaDataUso || getDataAtual() // Garante que a data seja salva
         };
         
         // Salvar no localStorage e verificar se foi salvo corretamente
         localStorage.setItem('quizState', JSON.stringify(estadoParaSalvar));
         
         // Verificação de debug - confirmar que os dados foram salvos corretamente
-        console.log("Estado salvo:", JSON.stringify(estadoParaSalvar));
-        console.log("Estado atual no localStorage:", localStorage.getItem('quizState'));
+        // console.log("Estado salvo:", JSON.stringify(estadoParaSalvar));
+        // console.log("Estado atual no localStorage:", localStorage.getItem('quizState'));
     }
 
     // Atualizar pontuação global do aplicativo
@@ -109,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
             elements.pointsDisplay.textContent = `${novosPontos} pontos`;
         }
         
-        console.log(`Pontuação global atualizada: ${pontosAtuais} + ${pontosAdicionais} = ${novosPontos}`);
+        // console.log(`Pontuação global atualizada: ${pontosAtuais} + ${pontosAdicionais} = ${novosPontos}`);
     }
 
     // Escolher tema baseado na dificuldade selecionada pelo usuário
@@ -151,6 +186,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Exibir pergunta
     function exibirPergunta() {
+        // Verificar se ainda há tentativas antes de exibir a pergunta
+        if (quizState.tentativasRestantes <= 0) {
+            console.log("Tentativas esgotadas para hoje.");
+            elements.iniciarQuizBtn.style.display = 'none';
+            elements.limiteAtingido.style.display = 'block';
+            return; // Não exibe a pergunta se não houver tentativas
+        }
+
         const tema = escolherTemaEDificuldade();
         
         // Atualizar interface
@@ -188,6 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Atualizar estado
         quizState.perguntasRespondidas++;
         quizState.tentativasRestantes--;
+        quizState.ultimaDataUso = getDataAtual(); // Atualiza a data do último uso
         
         // Tocar efeito sonoro de acordo com o resultado
         if (acertou) {
@@ -201,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Atualizar também a pontuação global do aplicativo
             atualizarPontuacaoGlobal(pontosGanhos);
             
-            console.log("Pontos adicionados:", pontosGanhos, "Total do quiz:", quizState.pontuacaoTotal);
+            // console.log("Pontos adicionados:", pontosGanhos, "Total do quiz:", quizState.pontuacaoTotal);
         } else {
             // Tocar som negativo para resposta incorreta
             playSound('errou.mp3');
@@ -236,9 +280,12 @@ document.addEventListener('DOMContentLoaded', function() {
             elements.iniciarQuizBtn.style.display = 'none';
             elements.limiteAtingido.style.display = 'block';
         } else {
-            // Voltar para a tela inicial
+            // Voltar para a tela inicial para escolher nova dificuldade/iniciar
             elements.secaoFeedback.style.display = 'none';
             elements.secaoInicial.style.display = 'block';
+            // Garante que o botão de iniciar esteja visível se ainda houver tentativas
+            elements.iniciarQuizBtn.style.display = 'block'; 
+            elements.limiteAtingido.style.display = 'none';
         }
     }
 
@@ -257,6 +304,9 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (dificuldade === 'dificil') {
             textoNivel = 'Nível difícil';
             pontos = 3.0;
+        } else if (dificuldade === 'extra') { // Adicionado para nível extra
+            textoNivel = 'Nível extra';
+            pontos = 3.0; // Ou outro valor desejado
         }
         
         elements.dificuldadeBadge.textContent = textoNivel;
@@ -291,7 +341,8 @@ document.addEventListener('DOMContentLoaded', function() {
         quizState.pontuacaoTotal = 0;
         quizState.perguntasRespondidas = 0;
         quizState.tentativasRestantes = 30;
-        carregarEstado();
+        quizState.ultimaDataUso = getDataAtual(); // Reseta a data também
+        carregarEstado(); // Recarrega o estado e atualiza a UI
         console.log("Quiz resetado com sucesso!");
     };
 
@@ -304,7 +355,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Inicializar
-    carregarEstado();
+    carregarEstado(); // Carrega o estado ou inicializa se necessário
     // Initialize difficulty display based on default hidden input value
-    atualizarDificuldade(document.getElementById("selecionar-dificuldade-hidden").value);
+    const dificuldadeInicial = document.getElementById("selecionar-dificuldade-hidden").value;
+    atualizarDificuldade(dificuldadeInicial);
+    // Garante que o botão correspondente à dificuldade inicial esteja ativo
+    document.querySelector(`.dificuldade-btn[data-value='${dificuldadeInicial}']`)?.classList.add('active');
+    document.querySelector(`.dificuldade-btn[data-value='${dificuldadeInicial}']`).style.backgroundColor = 'var(--primary-100)';
 });
+
